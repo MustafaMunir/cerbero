@@ -1,0 +1,31 @@
+From 5fd1284a1e1395f2616e89e972154492bb5ac2a3 Mon Sep 17 00:00:00 2001
+From: Mustafa <mustafa@mview.com.au>
+Date: Mon, 26 Feb 2018 11:18:57 +1100
+Subject: [PATCH] gstrtspsrc: removing the check which ignores receonly streams
+ as Dahua camera is sending incorrect SDP
+
+---
+ gst/rtsp/gstrtspsrc.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/gst/rtsp/gstrtspsrc.c b/gst/rtsp/gstrtspsrc.c
+index 7143d7870..ddfe0b7fe 100644
+--- a/gst/rtsp/gstrtspsrc.c
++++ b/gst/rtsp/gstrtspsrc.c
+@@ -1774,8 +1774,11 @@ gst_rtspsrc_collect_payloads (GstRTSPSrc * src, const GstSDPMessage * sdp,
+ 
+   if (gst_sdp_media_get_attribute_val (media, "recvonly") != NULL &&
+       /* We want to setup caps for streams configured as backchannel */
+-      !stream->is_backchannel)
+-    goto recvonly_media;
++      !stream->is_backchannel) {
++    GST_WARNING_OBJECT (src,
++        "DAHUA WORKAROUND : not ignoring recvonly streams.  ");
++    // goto recvonly_media;
++  }
+ 
+   /* Parse global SDP attributes once */
+   global_caps = gst_caps_new_empty_simple ("application/x-unknown");
+-- 
+2.14.1
+
