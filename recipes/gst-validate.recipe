@@ -4,6 +4,7 @@ from cerbero.utils import shell
 class Recipe(custom.GStreamer):
     name = 'gst-validate'
     remotes = {'origin': 'git://anongit.freedesktop.org/gstreamer/gst-devtools'}
+    commit = '831a70b'
     srcdir = 'validate'
     config_sh = 'sh ./autogen.sh --noconfigure && ./configure --enable-static --program-transform-name= '
     deps = ['gstreamer-1.0', 'gst-plugins-base-1.0', 'json-glib']
